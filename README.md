@@ -1,176 +1,243 @@
 # Gonzaga Student Investment Fund Portfolio Tracker
 
-This project is an Excel VBA portfolio tracker created for a student investment fund project.  
-It is designed to help an investment club track transactions, holdings, portfolio value, allocation, warnings, rebalancing needs, and historical portfolio snapshots.
+## Project idea
 
-## Project Overview
+A basic spreadsheet can track numbers, but it is easy to make mistakes when adding transactions or updating the portfolio manually.  
+This project uses Excel formulas, tables, dashboard sections, and VBA code to make the process more organized.
 
-The workbook combines Excel formulas, structured tables, dashboard visuals, and VBA automation.  
-The main goal of the project is to make portfolio tracking easier, more organized, and more automated than a basic spreadsheet.
+The workbook can track buy and sell transactions, calculate holdings, show portfolio performance, check allocation, give warnings, and save snapshots of the portfolio over time.
 
-Users can add Buy and Sell transactions, update market prices, refresh the portfolio, review portfolio performance, check allocation problems, and save portfolio snapshots over time.
+## Main functionality
 
-## Main Features
+The project includes:
 
-- Automated transaction input form
-- Buy and Sell transaction tracking
-- Input validation before adding transactions
-- Holdings calculation by ticker
-- Current market value tracking
-- Average cost and cost basis logic
-- Unrealized gain and loss calculation
-- Realized gain and loss logic for sell transactions
-- Portfolio summary report
-- Dashboard with key portfolio metrics
-- Allocation and rebalancing check
-- Portfolio warning system
-- Historical snapshot tracking
-- VBA log for macro activity
-- Clean workbook structure with technical support sheets hidden
+- transaction input form
+- buy and sell transaction tracking
+- input validation before adding a transaction
+- automatic calculations for transaction totals
+- net cash flow calculation
+- average cost logic
+- realized gain or loss for sell transactions
+- holdings calculation by ticker
+- current market value calculation
+- cost basis calculation
+- unrealized gain or loss calculation
+- portfolio weight calculation
+- dashboard refresh
+- portfolio summary update
+- allocation and rebalancing check
+- portfolio warning messages
+- history snapshot saving
+- VBA activity logging
 
-## Workbook Sheets
+## Workbook sheets
 
 ### Dashboard
 
-The Dashboard is the main page of the project.  
-It shows the portfolio overview, key financial metrics, portfolio warnings, allocation checks, and rebalancing information.
+The Dashboard is the main page of the workbook.  
+It shows the main portfolio information in one place.
 
-Main parts include:
+It includes:
 
-- Portfolio overview
-- Portfolio health
-- Allocation check
-- Rebalancing table
-- Portfolio warnings
-- Refresh button
-- Save snapshot button
+- portfolio overview
+- key portfolio numbers
+- portfolio health section
+- allocation check
+- rebalancing table
+- warning messages
+- Refresh Portfolio button
+- Save Snapshot button
+
+The Dashboard is meant to be the main page that a user looks at after entering transactions and updating prices.
 
 ### Transactions
 
-The Transactions sheet stores all portfolio transactions.  
-It includes a structured transaction table and an input form for adding new transactions.
+The Transactions sheet stores all buy and sell transactions.
 
-The transaction form allows the user to enter:
+It has two main parts:
 
-- Date
-- Ticker
-- Asset Type
-- Action
-- Quantity
-- Price per Unit
-- Broker Fee
-- Account
-- Notes
+- the transaction table
+- the input form
 
-The sheet also calculates transaction totals, net cash flow, average cost before sale, and realized gain or loss.
+The input form is used to enter a new transaction. After the user clicks the Add Transaction button, VBA checks the input and adds the transaction to the table.
+
+The Transactions sheet also includes calculated columns for:
+
+- total amount
+- net cash flow
+- average cost before sale
+- realized gain or loss
 
 ### Holdings
 
-The Holdings sheet calculates the current portfolio positions.  
-It summarizes each asset and shows values such as:
+The Holdings sheet calculates the current position for each asset.
 
-- Total bought
-- Total sold
-- Net quantity
-- Average cost
-- Current price
-- Market value
-- Cost basis
-- Unrealized gain or loss
-- Portfolio weight
+It shows:
+
+- ticker
+- asset type
+- total bought
+- total sold
+- net quantity
+- average cost
+- current price
+- market value
+- cost basis
+- unrealized gain or loss
+- portfolio weight
+
+This sheet connects the transaction history with the current prices.
 
 ### Prices
 
-The Prices sheet stores current market prices for each asset.  
-These prices are used to calculate current market value and unrealized performance.
+The Prices sheet stores the current prices for each asset.  
+These prices are used to calculate current market value and unrealized gain or loss.
 
 ### Summary
 
-The Summary sheet provides portfolio-level financial metrics.  
-It summarizes the overall value, cost basis, gains and losses, number of assets, largest holding, and other key statistics.
+The Summary sheet shows portfolio-level results.
+
+It includes totals such as:
+
+- current portfolio value
+- total cost basis
+- total unrealized gain or loss
+- number of assets
+- largest holding
+- portfolio performance information
+
+Some values on this sheet are updated by VBA when the portfolio is refreshed.
 
 ### History
 
-The History sheet saves portfolio snapshots over time.  
-This allows the user to track how the portfolio changes after updates.
+The History sheet saves portfolio snapshots.
+
+When the user clicks Save Snapshot, the macro saves the current portfolio status.  
+This makes it possible to track portfolio changes over time.
 
 ### VBA_Log
 
-The VBA_Log sheet records macro activity.  
-It helps show when important actions were completed, such as refreshing the portfolio, saving snapshots, or adding transactions.
+The VBA_Log sheet records macro activity.
+
+For example, it can record when:
+
+- the portfolio was refreshed
+- a transaction was added
+- a snapshot was saved
+
+This helps show that the VBA automation is working.
 
 ### Lists
 
-The Lists sheet is a technical support sheet used for dropdowns and validation lists.  
-It is hidden because regular users do not need to edit it.
+The Lists sheet is a hidden technical sheet.  
+It is used for dropdown lists and validation options.
 
-## VBA Automation
+## VBA code
 
-The workbook uses VBA macros to automate important tasks.
+The workbook uses several VBA modules.  
+I also included the VBA code in the `vba-code` folder so it can be viewed directly on GitHub.
 
-Main VBA functions include:
+### modDashboard.bas
 
-- Adding a new transaction
-- Clearing the transaction input form
-- Validating user input
-- Checking available quantity before selling
-- Refreshing the portfolio
-- Updating the summary report
-- Building portfolio warnings
-- Saving historical snapshots
-- Writing activity to the VBA log
+This module controls the main dashboard refresh process.
 
-## How to Use the Workbook
+It includes code that:
 
-1. Open the Excel macro-enabled workbook.
+- refreshes the portfolio
+- recalculates the workbook
+- updates the dashboard timestamp
+- updates portfolio warnings
+- connects the refresh button to the refresh macro
+
+This is one of the main automation parts of the project because it updates the workbook after changes are made.
+
+### modTransactions.bas
+
+This module controls the transaction form logic.
+
+It includes code that:
+
+- clears the input form
+- validates required fields
+- checks that quantity and price are valid
+- checks that broker fee is not negative
+- checks available quantity before a sell transaction
+- adds a new transaction to the transaction table
+- writes formulas into the new row
+- refreshes the portfolio after a transaction is added
+
+This module is important because it helps prevent bad transaction data from being added.
+
+### Sheet2_Transactions.bas
+
+This is the worksheet code for the Transactions sheet.
+
+It responds to changes on the Transactions sheet.  
+For example, it helps autofill some form information when a ticker is selected.
+
+This makes the input form easier to use.
+
+### modSummary.bas
+
+This module updates the Summary sheet.
+
+It calculates and updates portfolio-level information such as:
+
+- portfolio value
+- cost basis
+- unrealized gain or loss
+- number of assets
+- largest holding
+- top performer
+- worst performer
+
+This module helps connect the detailed worksheet calculations to the summary report.
+
+### modHistory.bas
+
+This module saves portfolio snapshots.
+
+It adds a new row to the History sheet with current portfolio information.  
+This allows the user to keep a record of portfolio changes over time.
+
+### modLogging.bas
+
+This module writes actions to the VBA_Log sheet.
+
+It is used to record macro activity, such as refreshing the portfolio, adding transactions, and saving snapshots.
+
+## How to use the workbook
+
+1. Open the `.xlsm` Excel file.
 2. Enable macros.
 3. Go to the Transactions sheet.
-4. Enter a new transaction in the input form.
-5. Click the Add Transaction button.
-6. Update prices on the Prices sheet if needed.
+4. Enter the transaction date, ticker, action, quantity, price, broker fee, account, and notes.
+5. Click Add Transaction.
+6. Update asset prices on the Prices sheet if needed.
 7. Go to the Dashboard.
-8. Click the Refresh Portfolio button.
-9. Review the updated portfolio metrics, warnings, and rebalancing results.
+8. Click Refresh Portfolio.
+9. Check the portfolio value, holdings, warnings, and rebalancing information.
 10. Click Save Snapshot if you want to save the current portfolio status to the History sheet.
 
-## Financial Logic
+## Files in this repository
 
-The project uses financial logic to calculate portfolio performance.  
-It tracks both buying and selling activity and separates current holdings from historical transactions.
+- `Gonzaga_Investment_Fund_Portfolio_Tracker.xlsm`  
+  Main Excel macro-enabled workbook.
 
-The workbook calculates:
+- `vba-code/modDashboard.bas`  
+  Dashboard refresh and warning logic.
 
-- Market value
-- Cost basis
-- Net quantity
-- Average cost
-- Unrealized gain or loss
-- Realized gain or loss
-- Portfolio weight
-- Allocation gap
-- Rebalancing recommendation
+- `vba-code/modTransactions.bas`  
+  Transaction form, validation, and add transaction logic.
 
-## Project Purpose
+- `vba-code/Sheet2_Transactions.bas`  
+  Worksheet event code for the Transactions sheet.
 
-The purpose of this project is to demonstrate how Excel and VBA can be used to build a practical automated portfolio tracker.  
-The project shows skills in spreadsheet design, financial analysis, data organization, automation, dashboard creation, and VBA programming.
+- `vba-code/modSummary.bas`  
+  Summary sheet update logic.
 
-## Tools Used
+- `vba-code/modHistory.bas`  
+  History snapshot logic.
 
-- Microsoft Excel
-- Excel formulas
-- Excel structured tables
-- VBA macros
-- Dashboard visuals
-- GitHub for project storage and presentation
-
-## File Included
-
-- `Gonzaga_Investment_Fund_Portfolio_Tracker.xlsm`
-
-This is the main macro-enabled Excel workbook for the project.
-
-## Notes
-
-This project was created for educational purposes.  
-The data inside the workbook is sample portfolio data used to demonstrate how the tracker works.
+- `vba-code/modLogging.bas`  
+  VBA log writing logic.
